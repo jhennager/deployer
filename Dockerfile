@@ -1,5 +1,5 @@
 # Use Red Hat UBI 8 standard base image
-FROM registry.access.redhat.com/ubi8/ubi
+FROM almalinux:8
 
 # Update and install packages
 RUN dnf -y update && \
@@ -9,13 +9,27 @@ RUN dnf -y update && \
         iproute \
         net-tools \
         procps \
+        python38 \
+        python38-pip \
+        python38-devel \
+        gcc \
+        make \
+        git \
+        iputils \
+        bind-utils \        
         && dnf clean all
 
-# Copy custom configuration files (optional)
-# COPY ./my-config.conf /etc/myapp/config.conf
+## Install ansible using pip
+RUN pip3 install --upgrade pip \
+    && pip install wheel \
+    && pip install ansible
+
+##Extra Configs
+RUN echo "alias ll='ls -la'" >> /root/.bashrc \
+    && mkdir /root/projects
 
 # Set a working directory
-WORKDIR /root
+WORKDIR /root/projects
 
 # Default command
 CMD ["/bin/bash"]
