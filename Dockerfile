@@ -21,8 +21,23 @@ RUN dnf -y update && \
         git \
         iputils \
         bind-utils \
-        terraform  \     
+        terraform  \
+        nfs-utils \     
         && dnf clean all
+
+# Install kubectl
+ENV KUBECTL_VERSION=v1.28.5
+
+RUN curl -sLo /usr/local/bin/kubectl https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
+    chmod +x /usr/local/bin/kubectl
+
+# Install helm
+ENV HELM_VERSION=v3.14.3
+
+RUN curl -sL https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz | tar xz && \
+    mv linux-amd64/helm /usr/local/bin/helm && \
+    chmod +x /usr/local/bin/helm && \
+    rm -rf linux-amd64
 
 ## Install ansible using pip
 RUN pip3 install --upgrade pip \
@@ -36,6 +51,7 @@ RUN echo "alias ll='ls -la'" >> /root/.bashrc \
     && mkdir /root/projects \
     && curl -sSL "https://github.com/derailed/k9s/releases/download/${K9S_VERSION}/k9s_Linux_amd64.tar.gz" \
     | tar xz && mv k9s /usr/local/bin/k9s && chmod +x /usr/local/bin/k9s
+
 
 # Set a working directory
 WORKDIR /root/projects
