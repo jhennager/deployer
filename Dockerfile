@@ -31,8 +31,11 @@ RUN pip3 install --upgrade pip \
     && ansible-galaxy collection install community.general
 
 ## Extra Configs
+ENV K9S_VERSION=v0.32.4
 RUN echo "alias ll='ls -la'" >> /root/.bashrc \
-    && mkdir /root/projects
+    && mkdir /root/projects \
+    && curl -sSL "https://github.com/derailed/k9s/releases/download/${K9S_VERSION}/k9s_Linux_amd64.tar.gz" \
+    | tar xz && mv k9s /usr/local/bin/k9s && chmod +x /usr/local/bin/k9s
 
 # Set a working directory
 WORKDIR /root/projects
