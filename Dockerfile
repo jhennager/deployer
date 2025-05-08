@@ -13,9 +13,9 @@ RUN dnf -y update && \
         iproute \
         net-tools \
         procps \
-        python38 \
-        python38-pip \
-        python38-devel \
+        python39 \
+        python39-pip \
+        python39-devel \
         gcc \
         make \
         git \
@@ -27,7 +27,8 @@ RUN dnf -y update && \
 ## Install ansible using pip
 RUN pip3 install --upgrade pip \
     && pip install wheel \
-    && pip install ansible
+    && pip install ansible \
+    && ansible-galaxy collection install community.general
 
 ## Extra Configs
 RUN echo "alias ll='ls -la'" >> /root/.bashrc \
